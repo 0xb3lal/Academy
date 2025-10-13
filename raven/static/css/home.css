@@ -1,0 +1,36 @@
+.navbar-logo {
+    height: 40px;   /* أو أي ارتفاع تحبه */
+    width: auto;    /* يحتفظ بالنسبة الصحيحة */
+}
+
+/* Enhanced lesson card styles */
+.lesson-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.lesson-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+.lesson-thumb {
+    width: 100%;
+    aspect-ratio: 16/9;
+    height: auto;
+    object-fit: cover;
+    background-color: #f5f5f7;
+}
+.lesson-badge {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    border-radius: 8px;
+}
+.author-avatar {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border: 1px solid #e5e5e5;
+}

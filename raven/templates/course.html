@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-4">
+    <div class="d-flex align-items-center mb-3">
+        <img src="{{ url_for('static', filename='course_icons/' + course.icon) }}" alt="{{ course.title }}" style="width:64px; height:64px;" class="me-3">
+        <h2 class="mb-0">{{ course.title }}</h2>
+    </div>
+    <p class="text-muted">{{ course.description }}</p>
+    <hr>
+    <h4>Lessons</h4>
+    <div class="list-group">
+        {% for lesson in lessons %}
+            <a class="list-group-item list-group-item-action" href="{{ url_for('lessons.lesson', lesson_slug=lesson.slug) }}">{{ lesson.title }}</a>
+        {% else %}
+            <div class="text-muted">No lessons yet.</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+

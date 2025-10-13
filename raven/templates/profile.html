@@ -1,0 +1,169 @@
+{% extends "dashboard.html" %}
+
+{% block profile %}
+<div class="{{'tab-pane fade show active' if active_tab=='profile' else 'tab-pane fade'}}" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+<form id="profileForm" action="" method="POST" enctype="multipart/form-data">
+
+    {{ profile_form.hidden_tag() }}
+
+    <fieldset class='form-group p-4 rounded'>
+        <legend class='border-bottom mb-4'>Profile Info</legend>
+        
+        <!-- Profile -->
+        <div class="text-center mb-4">
+            <img id="profilePreview" class="rounded-circle shadow-sm border"
+                src="{{ image_file }}" 
+                alt="Profile Picture" 
+                width="120" height="120">
+        </div>
+
+        <!-- Upload Picture -->
+        <div class="form-group mb-3 text-center">
+            <label for="profilePic" class="btn btn-outline-primary btn-sm px-4 py-2 rounded-pill shadow-sm ms-2">
+                Update Photo
+            </label>
+            {{ profile_form.picture(class="d-none", id="profilePic") }}
+
+            <button type="button" 
+                    class="btn btn-outline-danger btn-sm px-4 py-2 rounded-pill shadow-sm ms-2"
+                    data-bs-toggle="modal" data-bs-target="#deleteModal">
+                Delete Photo
+            </button>
+
+            {% if profile_form.picture.errors %}
+                {% for error in profile_form.picture.errors %}
+                    <div class="text-danger small mt-1">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- First Name + Last Name -->
+        <div class="row mb-3">
+            <div class="col">
+                {{ profile_form.fname.label(class="form-label") }}
+                {{ profile_form.fname(class="form-control") }}
+            </div>
+            <div class="col">
+                {{ profile_form.lname.label(class="form-label") }}
+                {{ profile_form.lname(class="form-control") }}
+            </div>
+        </div>
+
+        <!-- Username + Email -->
+        <div class="row mb-3">
+            <div class="col">
+                 {{ profile_form.username.label(class='form-control-label') }}
+                {% if profile_form.username.errors %}
+                    {{ profile_form.username(class='form-control form-control-lg is-invalid') }}
+                    <div class="invalid-feedback">
+                        {% for error in profile_form.username.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ profile_form.username(class='form-control form-control') }}
+                {% endif %}
+            </div>
+            <div class="col">
+                 {{ profile_form.email.label(class='form-control-label') }}
+                {% if profile_form.email.errors %}
+                    {{ profile_form.email(class='form-control form-control-lg is-invalid') }}
+                    <div class="invalid-feedback">
+                        {% for error in profile_form.email.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ profile_form.email(class='form-control form-control') }}
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Bio -->
+        <div class="mb-3">
+            {{ profile_form.bio.label(class='form-control-label') }}
+            {{ profile_form.bio(class='form-control') }}
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center mt-4">
+            <button id="updateBtn" class="btn btn-primary btn-lg px-5" type="submit" disabled>
+                Update Profile
+            </button>
+        </div>
+
+    </fieldset>
+</form>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-3 shadow-lg">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <p class="mb-3">Are you sure you want to reset your profile picture to default?</p>
+        <img id="modalPreview" src="{{ image_file }}" 
+             class="rounded-circle shadow-sm border" width="80" height="80" alt="Current Photo">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+        <form method="POST" action="">
+          <button type="submit" name="delete_picture" value="1" class="btn btn-outline-danger btn-sm px-4 py-2 rounded-pill shadow-sm ms-2" id="confirmDeleteBtn">
+            Delete
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% block scripts %}
+<script>
+  const updateBtn = document.getElementById("updateBtn");
+  const form = document.getElementById("profileForm");
+
+  const initialData = new FormData(form);
+
+  function isFormChanged() {
+      const currentData = new FormData(form);
+      for (let [key, value] of currentData.entries()) {
+          if (value !== initialData.get(key)) {
+              return true;
+          }
+      }
+      return false;
+  }
+
+  form.addEventListener("input", () => {
+      updateBtn.disabled = !isFormChanged();
+  });
+
+  document.getElementById("profilePic").addEventListener("change", function(event) {
+      let file = event.target.files[0];
+      if (file) {
+          let reader = new FileReader();
+          reader.onload = function(e) {
+              document.getElementById("profilePreview").src = e.target.result;
+              document.getElementById("modalPreview").src = e.target.result;
+              updateBtn.disabled = false; 
+          }
+          reader.readAsDataURL(file);
+      }
+  });
+
+  document.getElementById("confirmDeleteBtn").addEventListener("click", function() {
+      let defaultPic = "{{ url_for('static', filename='user_pics/default.png') }}";
+      document.getElementById("profilePreview").src = defaultPic;
+      document.getElementById("modalPreview").src = defaultPic;
+      updateBtn.disabled = false; 
+  });
+
+  form.addEventListener("submit", () => {
+      updateBtn.disabled = true;
+  });
+</script>
+{% endblock scripts %}
+{% endblock profile %}

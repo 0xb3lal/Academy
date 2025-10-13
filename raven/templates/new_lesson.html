@@ -1,0 +1,101 @@
+{% extends "dashboard.html" %}
+{% block new_lesson %}
+
+<div class="{{'tab-pane show active fade p-3' if active_tab=='new_lesson' else 'tab-pane fade p-3'}}" 
+     id="nav-newLesson" role="tabpanel" aria-labelledby="nav-newLesson-tab">
+
+    <form action="{{ url_for('lessons.new_lesson') }}" method="POST" enctype="multipart/form-data">
+        {{ new_lesson_form.hidden_tag() }}
+        <legend class="border-bottom my-3">New Lesson</legend>
+
+        <!-- Course -->
+        <div class="mb-3">
+            {{ new_lesson_form.course.label(class='form-control-label') }}
+            {% if new_lesson_form.course.errors %}
+                {{ new_lesson_form.course(class='form-select is-invalid') }}
+                <div class="invalid-feedback">
+                    {% for error in new_lesson_form.course.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ new_lesson_form.course(class='form-select') }}
+            {% endif %}
+        </div>
+
+        <button type="button" class="btn btn-primary mt-3"
+             onclick="window.location.href='{{ url_for('new_course') }}'">
+            Add New Course
+        </button>
+
+        <!-- Title -->
+        <div class="mb-3">
+            {{ new_lesson_form.title.label(class='form-control-label') }}
+            {% if new_lesson_form.title.errors %}
+                {{ new_lesson_form.title(class='form-control is-invalid') }}
+                <div class="invalid-feedback">
+                    {% for error in new_lesson_form.title.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ new_lesson_form.title(class='form-control') }}
+            {% endif %}
+        </div>
+
+        <!-- Slug -->
+        <div class="mb-3">
+            {{ new_lesson_form.slug.label(class='form-control-label') }}
+            {% if new_lesson_form.slug.errors %}
+                {{ new_lesson_form.slug(class='form-control is-invalid') }}
+                <div class="invalid-feedback">
+                    {% for error in new_lesson_form.slug.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ new_lesson_form.slug(class='form-control') }}
+            {% endif %}
+        </div>
+
+        <!-- Content -->
+        <div class="mb-3">
+            {{ new_lesson_form.content.label(class='form-control-label') }}
+            {% if new_lesson_form.content.errors %}
+                {{ new_lesson_form.content(class='form-control is-invalid') }}
+                <div class="invalid-feedback">
+                    {% for error in new_lesson_form.content.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ new_lesson_form.content(class='form-control') }}
+            {% endif %}
+        </div>
+
+        <!-- Thumbnail -->
+        <div class="mb-3">
+            {{ new_lesson_form.thumbnail.label(class='form-control-label') }}
+            {% if new_lesson_form.thumbnail.errors %}
+                {{ new_lesson_form.thumbnail(class='form-control is-invalid') }}
+                <div class="invalid-feedback">
+                    {% for error in new_lesson_form.thumbnail.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ new_lesson_form.thumbnail(class='form-control') }}
+            {% endif %}
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">Post</button>
+        </div>
+    </form>
+
+    {{ ckeditor.load(custom_url=url_for('static', filename='ckeditor/ckeditor.js')) }}
+    {{ ckeditor.config(name='content') }}
+</div>
+
+{% endblock new_lesson %}

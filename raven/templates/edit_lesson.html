@@ -1,0 +1,46 @@
+{% extends "dashboard.html" %}
+{% block user_lessons %}
+
+<div class="{{'tab-pane show active fade p-3' if active_tab=='user_lessons' else 'tab-pane fade p-3'}}" 
+     id="nav-Lessons" role="tabpanel" aria-labelledby="nav-user_lessons-tab">
+
+  <h3 class="mb-3">Update Lesson</h3>
+  <form method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+
+    <div class="mb-3">
+      {{ form.course.label(class='form-label') }}
+      {{ form.course(class='form-select') }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.title.label(class='form-label') }}
+      {{ form.title(class='form-control') }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.slug.label(class='form-label') }}
+      {{ form.slug(class='form-control') }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.content.label(class='form-label') }}
+      {{ form.content(class='form-control') }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.thumbnail.label(class='form-label') }}
+      {{ form.thumbnail(class='form-control') }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a href="{{ url_for('lessons.user_lessons') }}" class="btn btn-outline-primary">Cancel</a>
+  </form>
+
+  {{ ckeditor.load(custom_url=url_for('static', filename='ckeditor/ckeditor.js')) }}
+  {{ ckeditor.config(name='content') }}
+
+</div>
+
+{% endblock user_lessons %}
+

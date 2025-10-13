@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="py-4">
+  <div class="container">
+    <div class="row g-4 align-items-center">
+      <div class="col-12 col-md-3 text-center">
+        <img src="{{ url_for('static', filename='user_pics/' + author.image_file) }}" alt="{{ author.username }}" class="rounded-circle border" style="width:120px; height:120px; object-fit:cover;">
+      </div>
+      <div class="col-12 col-md-9">
+        <h2 class="mb-1">{{ author.fname }} {{ author.lname }}</h2>
+        <div class="text-muted mb-2">@{{ author.username }}</div>
+        {% if author.bio %}
+        <p class="mb-2">{{ author.bio }}</p>
+        {% endif %}
+        <div class="d-flex gap-2 flex-wrap">
+          {% if author.github %}<a class="btn btn-outline-primary btn-sm px-4 py-2 rounded-pill shadow-sm" href="{{ author.github }}" target="_blank">GitHub</a>{% endif %}
+          {% if author.linkedin %}<a class="btn btn-outline-primary btn-sm px-4 py-2 rounded-pill shadow-sm" href="{{ author.linkedin }}" target="_blank">LinkedIn</a>{% endif %}
+        </div>
+      </div>
+    </div>
+
+    <hr class="my-4">
+
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h4 class="mb-0">Courses</h4>
+      <span class="badge bg-primary">{{ total_courses }}</span>
+    </div>
+
+    {% if courses %}
+    <div class="row g-4">
+      {% for course in courses %}
+      <div class="col-sm-12 col-md-6 col-lg-4 d-flex">
+        <a href="{{ url_for('courses.course', course_title=course.title) }}" class="text-decoration-none w-100">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body text-center">
+              <img src="{{ url_for('static', filename='course_icons/' + course.icon) }}" alt="{{ course.title }}" class="mb-3" style="width:72px; height:72px;">
+              <h5 class="card-title mb-2">{{ course.title }}</h5>
+              <p class="card-text text-muted small">{{ course.description }}</p>
+            </div>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+      <div class="text-muted">No courses yet.</div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
+

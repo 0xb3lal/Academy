@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-4">
+  <div class="row g-4">
+    <!-- Sidebar: Course outline -->
+    <aside class="col-12 col-lg-4">
+      <div class="card border-0 shadow-sm lesson-outline sticky-lg-top">
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <h6 class="mb-0 text-muted">Course</h6>
+            <a class="btn btn-soft-primary btn-animated btn-pill btn-sm" href="{{ url_for('courses.course', course_title=lesson.course_name.title) }}">View Course</a>
+          </div>
+          <h4 class="mb-3">{{ lesson.course_name.title }}</h4>
+          <div class="list-group list-group-flush">
+            {% for l in course_lessons %}
+              <a href="{{ url_for('lessons.lesson', lesson_slug=l.slug) }}" class="list-group-item list-group-item-action d-flex align-items-center {% if l.id == lesson.id %}active{% endif %}">
+                <span class="badge rounded-pill bg-primary me-2">{{ loop.index }}</span>
+                <span class="flex-grow-1">{{ l.title }}</span>
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main content: Current lesson -->
+    <section class="col-12 col-lg-8">
+      <div class="card border-0 shadow-sm lesson-shell">
+        {% if lesson.thumbnail %}
+          <img src="{{ url_for('static', filename='lesson_thumbnails/' + lesson.thumbnail) }}" class="card-img-top lesson-hero" alt="{{ lesson.title }}">
+        {% endif %}
+        <div class="card-body lesson-content">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <h1 class="h3 mb-0">{{ lesson.title }}</h1>
+            <span class="text-muted small">{{ lesson.date_posted.strftime('%Y-%m-%d') }}</span>
+          </div>
+          <div class="mb-3 text-muted small">In <a href="{{ url_for('courses.course', course_title=lesson.course_name.title) }}">{{ lesson.course_name.title }}</a></div>
+
+          <div class="prose mb-4">
+            {{ lesson.content|safe }}
+          </div>
+
+          <div class="d-flex justify-content-between gap-2">
+            {% if prev_lesson %}
+              <a class="btn btn-outline-primary btn-animated btn-pill" href="{{ url_for('lessons.lesson', lesson_slug=prev_lesson.slug) }}">← Previous</a>
+            {% else %}
+              <span></span>
+            {% endif %}
+            {% if next_lesson %}
+              <a class="btn btn-primary btn-animated btn-pill" href="{{ url_for('lessons.lesson', lesson_slug=next_lesson.slug) }}">Next →</a>
+            {% endif %}
+          </div>
+
+          
+
+          <hr>
+          <div class="d-flex align-items-center mt-3">
+            <img src="{{ url_for('static', filename='user_pics/' + lesson.author.image_file) }}" class="rounded-circle me-2 author-avatar" alt="{{ lesson.author.username }}">
+            <span class="text-muted">By: <a href="{{ url_for('users.author', author_id=lesson.author.id) }}" class="link">{{ lesson.author.username }}</a></span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}
+

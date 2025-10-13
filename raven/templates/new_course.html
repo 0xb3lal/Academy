@@ -1,0 +1,37 @@
+{% extends "dashboard.html" %}
+{% block new_course %}
+<div class="{{'tab-pane show active fade p-3' if active_tab=='courses' else 'tab-pane fade p-3'}}" 
+     id="nav-courses" role="tabpanel" aria-labelledby="nav-courses-tab">
+    <h3 class="mb-3">Create a New Course</h3>
+    <form action="{{ url_for('courses.new_course') }}" method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            {{ form.title.label(class="form-label") }}
+            {{ form.title(class="form-control") }}
+            {% for error in form.title.errors %}
+                <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.description.label(class="form-label") }}
+            {{ form.description(class="form-control") }}
+            {% for error in form.description.errors %}
+                <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.icon.label(class="form-label") }}
+            {{ form.icon(class="form-control") }}
+            {% for error in form.icon.errors %}
+                <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a href="{{ url_for('new_lesson') }}" class="btn btn-outline-primary">Back to Lessons</a>
+    </form>
+</div>
+{% endblock new_course %}

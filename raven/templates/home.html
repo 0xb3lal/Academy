@@ -1,0 +1,108 @@
+{% extends "base.html"%}
+{% block content%}
+
+<!-- Hero Section -->
+<section class="text-dark p-3 text-center text-sm-start bg-white border-bottom">
+    <div class="container">
+        <div class="d-sm-flex align-items-center justify-content-between">
+            <div>
+                <h1 class="fw-bold display-5">
+                    Raven <span style="color:#5550ed;">Academy</span>
+                </h1>
+                <p class="lead my-3">
+                    We make learning programming simple and intuitive, all it takes is your dedication!
+                </p>
+                <a class="btn btn-md px-3 py-1 shadow-sm" 
+                   style="background-color:#5550ed; color:white;" 
+                   href="https://www.linkedin.com/in/belalammar" target="_blank">
+                   <i class="bi bi-linkedin me-2"></i>Follow Me
+                </a>
+            </div>
+            <img class="img-fluid w-15 d-none d-sm-block" 
+                 src="{{url_for('static', filename='img/black.svg')}}" 
+                 alt="raven_logo"
+                 style="max-width: 120px; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.2));">
+        </div>
+    </div>
+</section>
+
+<!-- Courses Section -->
+<section class="p-3" style="background: linear-gradient(135deg, #ffffff, #f4f4f9);">
+    <div class="container">
+        <h3 class="text-center fw-bold text-uppercase mb-5" 
+            style="color:#5550ed;" id="courses">Courses</h3>
+        <div class="row g-4">
+            {% for course in courses %}
+            <div class="col-sm-12 col-md-6 col-lg-4 d-flex">
+                <a href="{{ url_for('courses.course', course_title=course.title) }}" class="text-decoration-none w-100">
+                    <div class="card shadow-lg border-0 h-100" 
+                         style="transition: transform 0.3s, box-shadow 0.3s;">
+                        <div class="card-body text-center">
+                            <img src="{{url_for('static', filename='course_icons/' + course.icon)}}" 
+                                 alt="" class="mb-3" style="width:80px; height:80px;">
+                            <h4 class="card-title mb-3" style="color:#203a43;">
+                                {{course.title}}
+                            </h4>
+                            <p class="card-text text-muted">{{course.description}}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+
+            {% if total_courses and total_courses > 5 %}
+            <!-- For More button in place of 6th card -->
+            <div class="col-sm-12 col-md-6 col-lg-4 d-flex align-items-stretch">
+                <div class="d-flex align-items-center justify-content-center w-100" style="min-height: 220px;">
+                    <a href="{{ url_for('courses.allcourses') }}" class="btn btn-primary btn-sm px-4 py-2 rounded-pill shadow-sm">For more</a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+    </div>
+</section>
+
+<!-- Lessons Section -->
+<section class="p-3" style="background: linear-gradient(135deg, #e9ecf4, #f2f3f8);">
+    <div class="container">
+        <h3 class="text-center fw-bold text-uppercase mb-5" style="color:#5550ed;" id="lessons">
+            Lessons
+        </h3>
+        <div class="row g-4">
+            {% for lesson in lessons %}
+            <div class="col-sm-12 col-md-6 col-lg-4 d-flex">
+                <div class="lesson-card card h-100 border-0 shadow-sm w-100">
+                    <div class="position-relative">
+                        <a href="{{ url_for('lessons.lesson', lesson_slug=lesson.slug) }}" class="stretched-link"></a>
+                        <img src="{{ url_for('static', filename='lesson_thumbnails/' + lesson.thumbnail) }}" 
+                             class="card-img-top lesson-thumb" alt="{{ lesson.title }}">
+                        <span class="badge bg-primary lesson-badge">{{ lesson.course_name.title }}</span>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title mb-2 text-dark">{{ lesson.title }}</h5>
+                        <p class="card-text text-muted small mb-3">{{ lesson.date_posted.strftime('%Y-%m-%d') }}</p>
+                        <div class="mt-auto d-flex align-items-center">
+                            <img src="{{ url_for('static', filename='user_pics/' + lesson.author.image_file) }}" 
+                                 class="rounded-circle me-2 author-avatar" alt="{{ lesson.author.username }}">
+                            <span class="text-muted small me-1">By:</span>
+                            <a href="{{ url_for('users.author', author_id=lesson.author.id) }}" class="small text-decoration-underline">{{ lesson.author.username }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<style>
+/* Hover effect for all cards */
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+</style>
+
+
+{% endblock content %}

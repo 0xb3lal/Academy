@@ -1,0 +1,83 @@
+{% extends "dashboard.html" %}
+{% block user_lessons %}
+
+<div class="{{'tab-pane show active fade p-3' if active_tab=='user_lessons' else 'tab-pane fade p-3'}}" 
+     id="nav-Lessons" role="tabpanel" aria-labelledby="nav-user_lessons-tab">
+
+  <h3 class="mb-3">Your Lessons</h3>
+
+  {% if lessons.items %}
+  <div class="row g-3">
+    {% for lesson in lessons.items %}
+    <div class="col-12 col-md-6 col-lg-4 d-flex">
+      <div class="card h-100 w-100 shadow-sm">
+        {% if lesson.thumbnail %}
+        <a href="{{ url_for('lessons.lesson', lesson_slug=lesson.slug) }}">
+          <img src="{{ url_for('static', filename='lesson_thumbnails/' + lesson.thumbnail) }}" class="card-img-top" alt="{{ lesson.title }}" style="height:150px; object-fit:cover;">
+        </a>
+        {% endif %}
+        <div class="card-body d-flex flex-column">
+          <span class="badge bg-primary mb-2" style="align-self:flex-start;">{{ lesson.course_name.title }}</span>
+          <h6 class="mb-1 text-dark">{{ lesson.title }}</h6>
+          <div class="text-muted small mb-3">{{ lesson.date_posted.strftime('%Y-%m-%d') }}</div>
+          <div class="mt-auto d-flex gap-2 flex-wrap">
+            <a class="btn btn-outline-primary btn-sm px-4 py-2 rounded-pill shadow-sm ms-2" href="{{ url_for('lessons.edit_lesson', lesson_id=lesson.id) }}">Update</a>
+            <button type="button" class="btn btn-outline-danger btn-sm px-4 py-2 rounded-pill shadow-sm ms-2" data-bs-toggle="modal" data-bs-target="#deleteModal-{{ lesson.id }}">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Themed Delete Modal -->
+    <div class="modal fade" id="deleteModal-{{ lesson.id }}" tabindex="-1" aria-labelledby="deleteModalLabel-{{ lesson.id }}" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-3 shadow-lg">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel-{{ lesson.id }}">Confirm Delete</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="d-flex align-items-center">
+              {% if lesson.thumbnail %}
+              <img src="{{ url_for('static', filename='lesson_thumbnails/' + lesson.thumbnail) }}" alt="{{ lesson.title }}" style="width:64px; height:64px; object-fit:cover; border-radius:8px; border:1px solid #eee;" class="me-3">
+              {% endif %}
+              <div>
+                <div class="text-muted small mb-1">You're about to delete</div>
+                <div class="fw-semibold">{{ lesson.title }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+            <form method="POST" action="{{ url_for('lessons.delete_lesson', lesson_id=lesson.id) }}">
+              <button type="submit" class="btn btn-outline-danger btn-sm px-4 py-2 rounded-pill shadow-sm ms-2">Delete</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  <nav aria-label="User lessons pagination" class="mt-3">
+    <ul class="pagination justify-content-center">
+      <li class="page-item {% if not lessons.has_prev %}disabled{% endif %}">
+        <a class="page-link" href="{{ url_for('lessons.user_lessons', page=lessons.prev_num) }}" tabindex="-1">Previous</a>
+      </li>
+      {% for p in range(1, lessons.pages + 1) %}
+      <li class="page-item {% if p == lessons.page %}active{% endif %}"><a class="page-link" href="{{ url_for('lessons.user_lessons', page=p) }}">{{ p }}</a></li>
+      {% endfor %}
+      <li class="page-item {% if not lessons.has_next %}disabled{% endif %}">
+        <a class="page-link" href="{{ url_for('lessons.user_lessons', page=lessons.next_num) }}">Next</a>
+      </li>
+    </ul>
+  </nav>
+  {% else %}
+    <div class="text-muted">You haven't posted any lessons yet.</div>
+  {% endif %}
+
+</div>
+
+{% endblock user_lessons %}
+

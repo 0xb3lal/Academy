@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Tabs -->
+<div class="container my-4">
+    <nav class="d-flex justify-content-center dashboard-tabs">
+        <div class="nav nav-tabs justify-content-center" id="tablist">
+            <!-- Profile -->
+            <a class="link" href="{{ url_for('users.profile') }}">
+                <button class="{{ 'nav-link active' if active_tab=='profile' else 'nav-link' }}" 
+                        id="nav-profile-tab"
+                        data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab"
+                        aria-controls="nav-profile" aria-selected="true">
+                    Profile
+                </button>
+            </a>
+
+            <!-- Courses -->
+            <a class="link" href="{{ url_for('courses.new_course') }}">
+                <button class="{{ 'nav-link active' if active_tab=='courses' else 'nav-link' }}" 
+                        id="nav-courses-tab"
+                        data-bs-toggle="tab" data-bs-target="#nav-courses" type="button" role="tab"
+                        aria-controls="nav-courses" aria-selected="true">
+                    Add Course
+                </button>
+            </a>
+
+            <!-- New Lesson -->
+            <a class="link" href="{{ url_for('lessons.new_lesson') }}">
+                <button class="{{ 'nav-link active' if active_tab=='new_lesson' else 'nav-link' }}" 
+                        id="nav-newLesson-tab"
+                        data-bs-toggle="tab" data-bs-target="#nav-newLesson" type="button" role="tab"
+                        aria-controls="nav-newLesson" aria-selected="true">
+                    New Lesson
+                </button>
+            </a>
+
+            <!-- User Lessons -->
+            <a class="link" href="{{ url_for('lessons.user_lessons') }}">
+                <button class="{{ 'nav-link active' if active_tab=='user_lessons' else 'nav-link' }}" 
+                        id="nav-user_lessons-tab"
+                        data-bs-toggle="tab" data-bs-target="#nav-Lessons" type="button" role="tab"
+                        aria-controls="nav-Lessons" aria-selected="true">
+                    Your Lessons
+                </button>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Tab contents -->
+    <div class="tab-content pt-3" id="nav-tabContent">
+        {% block profile %}{% endblock profile %}
+        {% block new_course %}{% endblock new_course %}
+        {% block new_lesson %}{% endblock new_lesson %}
+        {% block user_lessons %}{% endblock user_lessons %}
+    </div>
+</div>
+{% endblock content %}
