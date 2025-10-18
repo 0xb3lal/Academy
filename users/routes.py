@@ -10,9 +10,6 @@ from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
 from . import users
 
-# ------------------------
-# Register route
-# ------------------------
 
 @users.route("/register", methods=['GET', 'POST'])
 def register():
@@ -35,9 +32,6 @@ def register():
     return render_template('register.html', title="Register", form=form)
 
 
-# ------------------------
-# Login route
-# ------------------------
 
 @users.route("/login", methods=['GET', 'POST'])
 def login():
@@ -45,6 +39,11 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
+            # Update last login time
+            from datetime import datetime
+            user.last_login = datetime.utcnow()
+            db.session.commit()
+            
             login_user(user, remember=form.remember_me.data)
             next_page = request.args.get('next')
             flash('Login Successful!', 'success')
@@ -77,9 +76,6 @@ def reset_request():
     return render_template('reset_password.html', title='Reset Password', form=form)
 
 
-# ------------------------
-# Password Reset: Set new password
-# ------------------------
 
 @users.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_token(token):
@@ -103,9 +99,6 @@ def reset_token(token):
     return render_template('reset_token.html', title='Reset Password', form=form)
 
 
-# ------------------------
-# Profile route
-# ------------------------
 
 @users.route("/profile", methods=['GET', 'POST'])
 @login_required
@@ -148,9 +141,6 @@ def profile():
     return render_template('profile.html', title="Profile", profile_form=profile_form, image_file=image_file, active_tab="profile")
 
 
-# ------------------------
-# Logout route
-# ------------------------
 
 @users.route("/logout")
 def logout():
@@ -158,9 +148,6 @@ def logout():
     return redirect(url_for('main.home'))
 
 
-# ------------------------
-# Author profile route
-# ------------------------
 
 @users.route("/author/<int:author_id>")
 def author(author_id: int):
@@ -180,9 +167,6 @@ def author(author_id: int):
     )
 
 
-# ------------------------
-# Helper Functions
-# ------------------------
 
 # Save uploaded images with random names and optional resizing
 def save_picture(form_picture, path, output_size=None):

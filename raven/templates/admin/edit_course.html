@@ -1,0 +1,180 @@
+{% extends "admin/base.html" %}
+
+{% block admin_content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Edit Course</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <a href="{{ url_for('admin.manage_courses') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Courses
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-edit"></i> Edit Course: {{ course.title }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            {{ form.title.label(class="form-label") }}
+                            {{ form.title(class="form-control") }}
+                            {% if form.title.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.title.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.description.label(class="form-label") }}
+                            {{ form.description(class="form-control", rows="4") }}
+                            {% if form.description.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.description.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.icon.label(class="form-label") }}
+                            {{ form.icon(class="form-control") }}
+                            {% if form.icon.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.icon.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            {% if course.icon %}
+                                <div class="mt-2">
+                                    <small class="text-muted">Current icon:</small>
+                                    <img src="{{ url_for('static', filename='course_icons/' + course.icon) }}" 
+                                         alt="Current icon" class="img-thumbnail" style="max-width: 100px;">
+                                </div>
+                            {% endif %}
+                        </div>
+
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{{ url_for('admin.manage_courses') }}" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-info-circle"></i> Course Information
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Course ID:</strong><br>
+                        <small class="text-muted">#{{ course.id }}</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong>Icon:</strong><br>
+                        <small class="text-muted">{{ course.icon }}</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong>Lessons Count:</strong><br>
+                        <span class="badge bg-info">{{ course.lessons|length }} lessons</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-link"></i> Quick Actions
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('courses.course', course_title=course.title) }}" 
+                           class="btn btn-info btn-sm" target="_blank">
+                            <i class="fas fa-external-link-alt"></i> View Course
+                        </a>
+                        
+                        <a href="{{ url_for('admin.manage_lessons') }}?course={{ course.id }}" 
+                           class="btn btn-secondary btn-sm">
+                            <i class="fas fa-list"></i> View Lessons
+                        </a>
+                        
+                        <button type="button" class="btn btn-danger btn-sm" 
+                                onclick="confirmDelete('{{ course.id }}', '{{ course.title }}')">
+                            <i class="fas fa-trash"></i> Delete Course
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">
+                    <i class="fas fa-exclamation-triangle text-warning"></i> Confirm Delete
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the course <strong id="courseTitle"></strong>?</p>
+                <p class="text-danger">
+                    <i class="fas fa-exclamation-circle"></i> 
+                    This will also delete all lessons in this course. This action cannot be undone!
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Delete Course
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function confirmDelete(courseId, courseTitle) {
+    document.getElementById('courseTitle').textContent = courseTitle;
+    document.getElementById('deleteForm').action = '{{ url_for("admin.delete_course", course_id=0) }}'.replace('0', courseId);
+    
+    var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    deleteModal.show();
+}
+</script>
+{% endblock %}
+

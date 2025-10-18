@@ -1,0 +1,128 @@
+{% extends "admin/base.html" %}
+
+{% block page_title %}Manage Courses{% endblock %}
+
+{% block page_actions %}
+<div class="btn-group" role="group">
+    <a href="{{ url_for('courses.new_course') }}" class="btn btn-success">
+        <i class="fas fa-plus me-1"></i>Add New Course
+    </a>
+</div>
+{% endblock %}
+
+{% block admin_content %}
+<div class="card shadow">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">All Courses</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Icon</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Lessons</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for course in courses.items %}
+                    <tr>
+                        <td>{{ course.id }}</td>
+                        <td>
+                            <img src="{{ url_for('static', filename='course_icons/' + course.icon) }}" 
+                                 width="40" height="40" alt="{{ course.title }}">
+                        </td>
+                        <td>{{ course.title }}</td>
+                        <td>{{ course.description[:50] }}{% if course.description|length > 50 %}...{% endif %}</td>
+                        <td>{{ course.lessons|length }}</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="{{ url_for('admin.edit_course', course_id=course.id) }}" 
+                                   class="btn btn-primary btn-sm">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button type="button" class="btn btn-danger btn-sm" 
+                                        onclick="confirmDelete({{ course.id }}, '{{ course.title }}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        {% if courses.pages > 1 %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if courses.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('admin.manage_courses', page=courses.prev_num) }}">Previous</a>
+                </li>
+                {% endif %}
+                
+                {% for page_num in courses.iter_pages() %}
+                    {% if page_num %}
+                        {% if page_num != courses.page %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('admin.manage_courses', page=page_num) }}">{{ page_num }}</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ page_num }}</span>
+                        </li>
+                        {% endif %}
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if courses.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('admin.manage_courses', page=courses.next_num) }}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete course <strong id="courseName"></strong>?</p>
+                <p class="text-danger">This action cannot be undone and will delete all lessons in this course!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Delete Course</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function confirmDelete(courseId, courseTitle) {
+    document.getElementById('courseName').textContent = courseTitle;
+    document.getElementById('deleteForm').action = "{{ url_for('admin.delete_course', course_id=0) }}".replace('0', courseId);
+    new bootstrap.Modal(document.getElementById('deleteModal')).show();
+}
+</script>
+{% endblock %}

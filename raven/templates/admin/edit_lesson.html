@@ -1,0 +1,284 @@
+{% extends "admin/base.html" %}
+
+{% block admin_content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Edit Lesson</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <a href="{{ url_for('admin.manage_lessons') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Lessons
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-edit"></i> Edit Lesson: {{ lesson.title }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    {{ form.title.label(class="form-label") }}
+                                    {{ form.title(class="form-control") }}
+                                    {% if form.title.errors %}
+                                        <div class="text-danger">
+                                            {% for error in form.title.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    {{ form.course_id.label(class="form-label") }}
+                                    {{ form.course_id(class="form-control") }}
+                                    {% if form.course_id.errors %}
+                                        <div class="text-danger">
+                                            {% for error in form.course_id.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    {{ form.duration.label(class="form-label") }}
+                                    {{ form.duration(class="form-control") }}
+                                    {% if form.duration.errors %}
+                                        <div class="text-danger">
+                                            {% for error in form.duration.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    {{ form.difficulty.label(class="form-label") }}
+                                    {{ form.difficulty(class="form-control") }}
+                                    {% if form.difficulty.errors %}
+                                        <div class="text-danger">
+                                            {% for error in form.difficulty.errors %}
+                                                <small>{{ error }}</small>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.description.label(class="form-label") }}
+                            {{ form.description(class="form-control", rows="4") }}
+                            {% if form.description.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.description.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.content.label(class="form-label") }}
+                            {{ form.content(class="form-control", rows="10") }}
+                            {% if form.content.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.content.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.thumbnail.label(class="form-label") }}
+                            {{ form.thumbnail(class="form-control") }}
+                            {% if form.thumbnail.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.thumbnail.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            {% if lesson.thumbnail %}
+                                <div class="mt-2">
+                                    <small class="text-muted">Current thumbnail:</small>
+                                    <img src="{{ url_for('static', filename='lesson_thumbnails/' + lesson.thumbnail) }}" 
+                                         alt="Current thumbnail" class="img-thumbnail" style="max-width: 150px;">
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.video_url.label(class="form-label") }}
+                            {{ form.video_url(class="form-control") }}
+                            {% if form.video_url.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.video_url.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.is_published.label(class="form-label") }}
+                            <div class="form-check">
+                                {{ form.is_published(class="form-check-input") }}
+                                <label class="form-check-label" for="{{ form.is_published.id }}">
+                                    Publish this lesson
+                                </label>
+                            </div>
+                            {% if form.is_published.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.is_published.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{{ url_for('admin.manage_lessons') }}" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-info-circle"></i> Lesson Information
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Created:</strong><br>
+                        <small class="text-muted">{{ lesson.date_created.strftime('%B %d, %Y at %I:%M %p') }}</small>
+                    </div>
+                    
+                    {% if lesson.date_updated %}
+                    <div class="mb-3">
+                        <strong>Last Updated:</strong><br>
+                        <small class="text-muted">{{ lesson.date_updated.strftime('%B %d, %Y at %I:%M %p') }}</small>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mb-3">
+                        <strong>Author:</strong><br>
+                        <small class="text-muted">{{ lesson.author.username }}</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong>Course:</strong><br>
+                        <small class="text-muted">{{ lesson.course.title }}</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong>Status:</strong><br>
+                        {% if lesson.is_published %}
+                            <span class="badge bg-success">Published</span>
+                        {% else %}
+                            <span class="badge bg-warning">Draft</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-link"></i> Quick Actions
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('lessons.lesson', lesson_slug=lesson.slug) }}" 
+                           class="btn btn-info btn-sm" target="_blank">
+                            <i class="fas fa-external-link-alt"></i> View Lesson
+                        </a>
+                        
+                        <a href="{{ url_for('admin.edit_course', course_id=lesson.course.id) }}" 
+                           class="btn btn-secondary btn-sm">
+                            <i class="fas fa-book"></i> Edit Course
+                        </a>
+                        
+                        <button type="button" class="btn btn-danger btn-sm" 
+                                onclick="confirmDelete('{{ lesson.id }}', '{{ lesson.title }}')">
+                            <i class="fas fa-trash"></i> Delete Lesson
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">
+                    <i class="fas fa-exclamation-triangle text-warning"></i> Confirm Delete
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the lesson <strong id="lessonTitle"></strong>?</p>
+                <p class="text-danger">
+                    <i class="fas fa-exclamation-circle"></i> 
+                    This action cannot be undone!
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Delete Lesson
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function confirmDelete(lessonId, lessonTitle) {
+    document.getElementById('lessonTitle').textContent = lessonTitle;
+    document.getElementById('deleteForm').action = '{{ url_for("admin.delete_lesson", lesson_id=0) }}'.replace('0', lessonId);
+    
+    var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    deleteModal.show();
+}
+</script>
+{% endblock %}
+

@@ -1,0 +1,507 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Panel{% endblock %}
+
+{% block content %}
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+/* إخفاء الفوتر في صفحات الإدارة */
+footer {
+    display: none !important;
+}
+
+/* تحسين مظهر صفحة الإدارة - ألوان أكثر راحة للعين */
+body {
+    margin-bottom: 0 !important;
+    background-color: #f8fafc;
+}
+
+.container-fluid {
+    min-height: 100vh;
+}
+
+.main-content {
+    min-height: calc(100vh - 56px); /* ارتفاع الشاشة ناقص ارتفاع الـ navbar */
+    background-color: #f8fafc;
+}
+
+/* تحسين استايل الأزرار في صفحة الإدارة - ألوان أكثر راحة للعين */
+.btn {
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: none;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #5b5cf0, #7c3aed);
+    color: white;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #059669, #047857);
+    color: white;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #d97706, #b45309);
+    color: white;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: white;
+}
+
+.btn-info {
+    background: linear-gradient(135deg, #06b6d4, #0891b2);
+    color: white;
+}
+
+.btn-info:hover {
+    background: linear-gradient(135deg, #0891b2, #0e7490);
+    color: white;
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #4b5563, #374151);
+    color: white;
+}
+
+/* تحسين استايل الجداول - ألوان أكثر راحة للعين */
+.table {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+}
+
+.table thead th {
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+    color: #475569;
+    border: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #cbd5e1;
+}
+
+.table tbody tr {
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.table tbody tr:hover {
+    background-color: #f8fafc;
+    transform: none;
+    transition: all 0.2s ease;
+}
+
+/* تحسين استايل الكروت - ألوان أكثر راحة للعين */
+.card {
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius-md);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    transition: all 0.3s ease;
+    background-color: #ffffff;
+}
+
+.card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    border-bottom: 1px solid #e2e8f0;
+    border-radius: var(--radius-md) var(--radius-md) 0 0 !important;
+    font-weight: 600;
+    color: #475569;
+}
+
+/* تحسين استايل النماذج - ألوان أكثر راحة للعين */
+.form-control {
+    border-radius: var(--radius-md);
+    border: 2px solid #e2e8f0;
+    transition: all 0.3s ease;
+    background-color: #ffffff;
+    color: #475569;
+}
+
+.form-control:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.15);
+    transform: none;
+    background-color: #ffffff;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 0.5rem;
+}
+
+/* تحسين استايل التنبيهات - ألوان أكثر راحة للعين */
+.alert {
+    border: none;
+    border-radius: var(--radius-md);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    font-weight: 500;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+    color: #065f46;
+    border-left: 4px solid #10b981;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #fef2f2, #fee2e2);
+    color: #991b1b;
+    border-left: 4px solid #ef4444;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #fffbeb, #fef3c7);
+    color: #92400e;
+    border-left: 4px solid #f59e0b;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    color: #1e40af;
+    border-left: 4px solid #3b82f6;
+}
+
+/* تحسين استايل الـ Sidebar - لون أبيض مطفى */
+.sidebar {
+    background: linear-gradient(180deg, #ffffff, #f8fafc) !important;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.08);
+    border-right: 1px solid #e2e8f0;
+}
+
+.sidebar .nav-link {
+    color: #64748b !important;
+    border-radius: var(--radius-md);
+    margin: 2px 0;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    padding: 12px 16px;
+}
+
+.sidebar .nav-link:hover {
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+    color: #475569 !important;
+    transform: translateX(3px);
+}
+
+.sidebar .nav-link.active {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white !important;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+.sidebar .nav-link i {
+    width: 20px;
+    text-align: center;
+}
+
+/* تحسين استايل الـ Badges - ألوان أكثر راحة للعين */
+.badge {
+    border-radius: 6px;
+    font-weight: 500;
+    padding: 0.5em 0.75em;
+}
+
+.badge.bg-danger {
+    background-color: #ef4444 !important;
+    color: white;
+}
+
+.badge.bg-secondary {
+    background-color: #6b7280 !important;
+    color: white;
+}
+
+.badge.bg-primary {
+    background-color: #6366f1 !important;
+    color: white;
+}
+
+.badge.bg-success {
+    background-color: #10b981 !important;
+    color: white;
+}
+
+.badge.bg-warning {
+    background-color: #f59e0b !important;
+    color: white;
+}
+
+.badge.bg-info {
+    background-color: #06b6d4 !important;
+    color: white;
+}
+
+/* تحسين استايل الـ Modals - ألوان أكثر راحة للعين */
+.modal-content {
+    border: none;
+    border-radius: var(--radius-md);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    background-color: #ffffff;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    border-bottom: 1px solid #e2e8f0;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    color: #475569;
+}
+
+.modal-footer {
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    border-top: 1px solid #e2e8f0;
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+/* تحسين استايل الـ Statistics Cards - ألوان أكثر راحة للعين */
+.border-left-primary {
+    border-left: 0.25rem solid #6366f1 !important;
+}
+
+.border-left-success {
+    border-left: 0.25rem solid #10b981 !important;
+}
+
+.border-left-info {
+    border-left: 0.25rem solid #06b6d4 !important;
+}
+
+.border-left-warning {
+    border-left: 0.25rem solid #f59e0b !important;
+}
+
+.text-gray-800 {
+    color: #475569 !important;
+}
+
+.text-gray-300 {
+    color: #94a3b8 !important;
+}
+
+/* تحسين استايل الـ Flash Messages */
+.admin-flash-container {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1080;
+    width: 90%;
+    max-width: 600px;
+}
+
+.admin-flash-container .alert {
+    margin-bottom: 10px;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+            <div class="position-sticky pt-3">
+                <div class="text-center mb-4">
+                    <h4 class="text-dark">Admin Panel</h4>
+                    <small class="text-muted">Welcome, {{ current_user.username }}</small>
+                </div>
+                
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'admin.dashboard' %}active{% endif %}" 
+                           href="{{ url_for('admin.dashboard') }}">
+                            <i class="fas fa-tachometer-alt me-2"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'admin.manage_users' %}active{% endif %}" 
+                           href="{{ url_for('admin.manage_users') }}">
+                            <i class="fas fa-users me-2"></i>
+                            Manage Users
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'admin.manage_courses' %}active{% endif %}" 
+                           href="{{ url_for('admin.manage_courses') }}">
+                            <i class="fas fa-book me-2"></i>
+                            Manage Courses
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'admin.manage_lessons' %}active{% endif %}" 
+                           href="{{ url_for('admin.manage_lessons') }}">
+                            <i class="fas fa-file-alt me-2"></i>
+                            Manage Lessons
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'admin.statistics' %}active{% endif %}" 
+                           href="{{ url_for('admin.statistics') }}">
+                            <i class="fas fa-chart-bar me-2"></i>
+                            Statistics
+                        </a>
+                    </li>
+                </ul>
+                
+                <hr class="text-muted">
+                
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.home') }}">
+                            <i class="fas fa-home me-2"></i>
+                            Back to Site
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('users.logout') }}">
+                            <i class="fas fa-sign-out-alt me-2"></i>
+                            Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">{% block page_title %}Admin Panel{% endblock %}</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    {% block page_actions %}{% endblock %}
+                </div>
+            </div>
+
+            <!-- Flash Messages - Single Message System -->
+            <div class="admin-flash-container">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% set latest_message = messages[-1] %}
+                        <div class="alert alert-{{ 'danger' if latest_message[0] == 'error' else latest_message[0] }} alert-dismissible fade show" role="alert">
+                            <i class="fas fa-{{ 'check-circle' if latest_message[0] == 'success' else 'exclamation-triangle' if latest_message[0] == 'warning' else 'info-circle' if latest_message[0] == 'info' else 'times-circle' }} me-2"></i>
+                            {{ latest_message[1] }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <!-- Page Content -->
+            {% block admin_content %}{% endblock %}
+        </main>
+    </div>
+</div>
+
+<style>
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 48px 0 0;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
+
+.sidebar .nav-link {
+    font-weight: 500;
+    color: #adb5bd;
+}
+
+.sidebar .nav-link:hover {
+    color: #fff;
+}
+
+.sidebar .nav-link.active {
+    color: #fff;
+    background-color: #007bff;
+}
+
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 48px);
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+main {
+    margin-left: 0;
+}
+
+@media (min-width: 768px) {
+    main {
+        margin-left: 240px;
+    }
+}
+</style>
+
+<script>
+// Auto-dismiss flash messages after 5 seconds
+document.addEventListener('DOMContentLoaded', function() {
+    const alerts = document.querySelectorAll('.admin-flash-container .alert');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        }, 5000);
+    });
+});
+</script>
+{% endblock %}

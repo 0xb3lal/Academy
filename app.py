@@ -43,11 +43,13 @@ def create_app():
     from courses import courses as courses_bp
     from lessons import lessons as lessons_bp
     from users import users as users_bp
+    from admin import admin as admin_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(courses_bp, url_prefix='/courses')
     app.register_blueprint(lessons_bp, url_prefix='/lessons')
     app.register_blueprint(users_bp, url_prefix='/users')
+    app.register_blueprint(admin_bp)
 
     return app
 

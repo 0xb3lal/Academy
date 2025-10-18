@@ -33,6 +33,9 @@ def create_models():
         last_reset_token = db.Column(db.String(100), nullable=True)
         reset_attempts = db.Column(db.Integer, default=0)
         last_reset_attempt = db.Column(db.DateTime, nullable=True)
+        is_admin = db.Column(db.Boolean, default=False, nullable=False)
+        password_changed_at = db.Column(db.DateTime, nullable=True)
+        last_login = db.Column(db.DateTime, nullable=True)
         lesson = db.relationship('Lesson', backref='author', lazy=True)
         
         def get_reset_token(self):
