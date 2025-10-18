@@ -85,6 +85,12 @@ A comprehensive web-based learning management system built with Flask, featuring
 - pip (Python package installer)
 - Git
 
+### Important Notes
+- This repository is clean and ready for deployment
+- No virtual environment or database files are included (as per best practices)
+- All cache files and temporary data have been removed
+- The project follows standard Python project structure
+
 ### Step 1: Clone the Repository
 ```bash
 git clone https://github.com/yourusername/raven_project.git
@@ -111,7 +117,8 @@ pip install -r requirements.txt
 ### Step 4: Environment Configuration
 Create a `.env` file in the project root:
 ```bash
-cp env.example .env
+# Create .env file manually
+touch .env  # On Windows: type nul > .env
 ```
 
 Edit `.env` with your configuration:
@@ -130,10 +137,10 @@ DATABASE_URL=sqlite:///site.db
 
 ### Step 5: Database Setup
 ```bash
-# Initialize database
+# Initialize database (if not already initialized)
 flask db init
 
-# Create initial migration
+# Create initial migration (if needed)
 flask db migrate -m "Initial migration"
 
 # Apply migrations
@@ -194,7 +201,6 @@ raven_project/
 ├── config.py              # Configuration settings
 ├── models.py              # Database models
 ├── requirements.txt       # Python dependencies
-├── env.example           # Environment variables template
 ├── .gitignore            # Git ignore rules
 │
 ├── admin/                # Admin module
@@ -236,8 +242,8 @@ raven_project/
 │   ├── versions/         # Migration files
 │   └── alembic.ini       # Alembic configuration
 │
-└── instance/             # Instance-specific files
-    └── site.db          # SQLite database (development)
+└── instance/             # Instance-specific files (created automatically)
+    └── site.db          # SQLite database (created on first run)
 ```
 
 ## API Documentation
@@ -348,7 +354,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 For support and questions:
 - Create an issue on GitHub
 - Check the documentation
-- Review the troubleshooting guide in SETUP.md
+- Review the installation steps above
 
 ## Acknowledgments
 
