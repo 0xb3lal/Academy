@@ -51,45 +51,11 @@ A comprehensive web-based learning management system built with Flask, featuring
 - Secure session management
 - Email verification system
 
-## Technology Stack
-
-### Backend
-- **Flask 2.3.3** - Web framework
-- **SQLAlchemy 2.0.44** - ORM and database management
-- **Flask-Login 0.6.3** - User session management
-- **Flask-Bcrypt 1.0.1** - Password hashing
-- **Flask-WTF 1.2.1** - Form handling and CSRF protection
-- **Flask-Mail 0.10.0** - Email functionality
-- **Flask-Migrate 4.1.0** - Database migrations
-
-### Frontend
-- **Bootstrap 5.1.3** - CSS framework
-- **Font Awesome 6.0.0** - Icons
-- **CKEditor** - Rich text editor
-- **Custom CSS** - Brand-specific styling
-
-### Database
-- **SQLite** (default) - Development database
-- **PostgreSQL/MySQL** - Production ready
-
-### Additional Tools
-- **Pillow 11.3.0** - Image processing
-- **python-dotenv 1.1.1** - Environment variable management
-- **bleach 6.2.0** - HTML sanitization
-- **email-validator 2.3.0** - Email validation
-
 ## Installation
 
 ### Prerequisites
 - Python 3.8 or higher
 - pip (Python package installer)
-- Git
-
-### Important Notes
-- This repository is clean and ready for deployment
-- No virtual environment or database files are included (as per best practices)
-- All cache files and temporary data have been removed
-- The project follows standard Python project structure
 
 ### Step 1: Clone the Repository
 ```bash
@@ -317,14 +283,14 @@ raven_project/
 ## Deployment
 
 ### Production Checklist
-- [ ] Set strong `SECRET_KEY` in environment
-- [ ] Use production database (PostgreSQL/MySQL)
-- [ ] Configure proper email settings
-- [ ] Enable HTTPS
-- [ ] Set up proper logging
-- [ ] Configure static file serving
-- [ ] Set up backup strategy
-- [ ] Configure monitoring
+-  Set strong `SECRET_KEY` in environment
+-  Use production database (PostgreSQL/MySQL)
+-  Configure proper email settings
+-  Enable HTTPS
+-  Set up proper logging
+-  Configure static file serving
+-  Set up backup strategy
+-  Configure monitoring
 
 ### Docker Deployment
 ```dockerfile
@@ -349,19 +315,6 @@ CMD ["python", "run.py"]
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Support
-
-For support and questions:
-- Create an issue on GitHub
-- Check the documentation
-- Review the installation steps above
-
-## Acknowledgments
-
-- Flask community for the excellent framework
-- Bootstrap team for the CSS framework
-- CKEditor team for the rich text editor
-- All contributors and testers
 
 ---
 
