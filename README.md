@@ -193,7 +193,7 @@ From_0_2 _Hero_project/
 │   ├── __init__.py
 │   └── routes.py         # Main routes
 │
-├── From_0_2 _Hero/                # Static files and templates
+├── Academy/       # Static files and templates
 │   ├── static/           # CSS, JS, images
 │   │   ├── css/          # Stylesheets
 │   │   ├── img/          # Images
