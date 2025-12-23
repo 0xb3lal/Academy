@@ -1,4 +1,4 @@
-# From 0 To hero Academy - Online Learning Platform
+# Academy.net - Online Learning Platform
 
 A comprehensive web-based learning management system built with Flask, featuring course management, lesson creation, user authentication, and administrative controls.
 
@@ -59,8 +59,8 @@ A comprehensive web-based learning management system built with Flask, featuring
 
 ### Step 1: Clone the Repository
 ```bash
-git clone https://github.com/yourusername/From_0_2 _Hero_project.git
-cd From_0_2 _Hero_project
+git clone https://github.com/yourusername/Academy.git
+cd Academy
 ```
 
 ### Step 2: Create Virtual Environment
@@ -193,7 +193,7 @@ From_0_2 _Hero_project/
 │   ├── __init__.py
 │   └── routes.py         # Main routes
 │
-├── Academy/       # Static files and templates
+├── Academy/              # Static files and templates
 │   ├── static/           # CSS, JS, images
 │   │   ├── css/          # Stylesheets
 │   │   ├── img/          # Images
