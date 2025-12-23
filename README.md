@@ -1,4 +1,4 @@
-# Raven Academy - Online Learning Platform
+# From 0 To hero Academy - Online Learning Platform
 
 A comprehensive web-based learning management system built with Flask, featuring course management, lesson creation, user authentication, and administrative controls.
 
@@ -59,8 +59,8 @@ A comprehensive web-based learning management system built with Flask, featuring
 
 ### Step 1: Clone the Repository
 ```bash
-git clone https://github.com/yourusername/raven_project.git
-cd raven_project
+git clone https://github.com/yourusername/From_0_2 _Hero_project.git
+cd From_0_2 _Hero_project
 ```
 
 ### Step 2: Create Virtual Environment
@@ -161,7 +161,7 @@ To enable email functionality:
 ## Project Structure
 
 ```
-raven_project/
+From_0_2 _Hero_project/
 ├── app.py                 # Application factory and configuration
 ├── run.py                 # Application entry point
 ├── config.py              # Configuration settings
@@ -193,7 +193,7 @@ raven_project/
 │   ├── __init__.py
 │   └── routes.py         # Main routes
 │
-├── raven/                # Static files and templates
+├── From_0_2 _Hero/                # Static files and templates
 │   ├── static/           # CSS, JS, images
 │   │   ├── css/          # Stylesheets
 │   │   ├── img/          # Images
